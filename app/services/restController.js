@@ -22,6 +22,15 @@ class RestController{
 
     }
 
+    getUser(url,onSuccess,onError){
+        $.get({
+            url: url,
+            success: onSuccess
+          });
+
+
+    }
+
     getCommentsArticle(url,onSuccess,onError){
         $.get({
             url: url,
@@ -79,7 +88,7 @@ class RestController{
 
     }
 
-    hideComment(url,data,onSuccess,onError){
+    statusComment(url,data,onSuccess,onError){
         $.ajax({
             url: url,
             type: 'PATCH',

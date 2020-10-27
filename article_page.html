@@ -56,7 +56,8 @@
 
 
 			<div class="shadow-sm p-3 mb-5 bg-white rounded">
-				<div class="row">
+				<footer class="commentStatus"></footer>
+				<div class="row pt-3">
 					<div class="col-md-6">
 						<p class="commentAuthor"></p>
 						<p class="commentBody"></p>
@@ -77,15 +78,8 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
 		integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
 		crossorigin="anonymous"></script>
-	<script>
-		$(document).ready(function () {
-			$("#button").click(function () {
-				var comment = $("#comment").val();
-				$("#p").html(comment);
-			});
-		});		
-	</script>
 	<script src="app/models/Post.js"></script>
+	<script src="app/models/Comment.js"></script>
 	<script src="app/services/restController.js"></script>
 	<script src="app/controllers/article_page.js"></script>
 	<script src="app/js/main2.js"></script>

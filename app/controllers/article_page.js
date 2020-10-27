@@ -2,10 +2,24 @@ class ArticlePageController {
 
     constructor() {
         this.restController = new RestController()
+        this.postHeader
+        this.postSubtitle
+        this.postBody
+        this.postImg
+        this.postAuthor
+        this.postDate
+        this.postTags
     }
 
     init(){
         $(document).ready(function () {
+            this.postHeader = $(".articleTitle")
+            this.postSubtitle = $(".articleSubtitle")
+            this.postBody = $(".articleBody")
+            this.postImg = $(".img-thumbnail")
+            this.postAuthor = $(".articleAuthor")
+            this.postDate = $(".articleDate")
+            this.postTags = $(".articleTag")
 
             var post = JSON.parse(sessionStorage.getItem('data'));
             this.getPost(post);
@@ -29,21 +43,13 @@ class ArticlePageController {
         postContainer.attr("id", "")
         postContainer.addClass("class", "articleContainer")
 
-        var postHeader = $(".articleTitle")
-        var postSubtitle = $(".articleSubtitle")
-        var postBody = $(".articleBody")
-        var postImg = $(".img-thumbnail")
-        var postAuthor = $(".articleAuthor")
-        var postDate = $(".articleDate")
-        var postTags = $(".articleTag")
-
-        postAuthor.html(post.autore)
-        postBody.html(post.body)
-        postHeader.html(post.title)
-        postSubtitle.html(post.subtitle)
-        postDate.html(this.formatDate(post.Created_date))
-        postTags.html(post.Ttags.toString())
-        postImg.attr("src", "" + post.img_source + "")
+        this.postAuthor.html(post.autore)
+        this.postBody.html(post.body)
+        this.postHeader.html(post.title)
+        this.postSubtitle.html(post.subtitle)
+        this.postDate.html(this.formatDate(post.Created_date))
+        this.postTags.html(post.Ttags.toString())
+        this.postImg.attr("src", "" + post.img_source + "")
 
     }
 
@@ -64,7 +70,7 @@ class ArticlePageController {
             console.log("data", data)
             for (var id in data) {
                 var comment = data[id]
-                if(comment.id_articolo===post._id&&comment.public===true)
+                if(comment.id_articolo===post._id)
                     this.createUIComment(comment)
 
             }
@@ -76,28 +82,46 @@ class ArticlePageController {
         var commentDate = $(".commentDate")
         var commentName = $(".commentAuthor")
         var commentBody = $(".commentBody")
-        var hideCommentBtn = '<a href="#" class="card-link" id="hideComment">nascondi</a>'
+        var commentStatus = $(".commentStatus")
+        var hideCommentBtn = '<a href="#" class="card-link pl-3 pb-1" id="hideComment">mostra/nascondi</a>'
 
         commentDate.html(this.formatDate(comment.Created_date))
         commentName.html(comment.autore)
         commentBody.html(comment.body)
         $(".row").append(hideCommentBtn)
 
+        if(comment.public===true){
+            commentStatus.html("Visibile")
+        }
+        else{
+            commentStatus.html("Nascosto")
+        }
+
 
         $("#hideComment").click(function () {
-            comment.public=false
-            this.hideComment(comment)
+            console.log("ciao")
+            if(comment.public===false){
+                comment.public=true
+            }
+            else{
+                comment.public=false
+            }    
+            this.statusComment(comment)
         }.bind(this))
+
+        
+
+        
 
     };
 
-    hideComment(comment) {
+    statusComment(comment) {
 
         var data = {
             "public": comment.public
         }
 
-        this.restController.hideComment("http://localhost:3000/comments/" + comment._id, data,
+        this.restController.statusComment("http://localhost:3000/comments/" + comment._id, data,
             function () {      
                 location.reload(true)
             }.bind(this)
