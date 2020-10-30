@@ -1,1 +1,0 @@
-new LoginController().init();

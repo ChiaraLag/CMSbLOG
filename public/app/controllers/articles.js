@@ -95,10 +95,6 @@ class PostController {
             this.getPosts()
 
 
-            //$('#readPost').on('click',function(){ //change the selectors according to your HTML
-               // localStorage.setItem("articleLink", $(this).data('target-article')); // dynamic assignment       
-              //);
-
         }.bind(this))
 
     }
@@ -122,15 +118,12 @@ class PostController {
         }
         //console.log("ID post", post._id)
 
-        this.restController.patch("http://localhost:3000/articles/?username="+this.username+"&password="+this.password+""+ post._id, data,
+        this.restController.patch("http://localhost:3000/articles/"+post._id+"?username="+this.username+"&password="+this.password+"", data,
             function () {
-                //this.closeModal()
-                //this.resetModal()
                 this.updateUIPost(post)
                 this.editMode = false
                 this.editedPost = null       
                 location.reload(true)
-                //location.reload(true)
 
             }.bind(this)
         )
@@ -140,7 +133,7 @@ class PostController {
 
     deletePost(post) {
 
-        this.restController.delete("http://localhost:3000/articles/?username="+this.username+"&password="+this.password+""+ post._id,
+        this.restController.delete("http://localhost:3000/articles/"+ post._id +"?username="+this.username+"&password="+this.password+"",
             function () {
                 location.reload(true)
             }.bind(this)
@@ -150,7 +143,7 @@ class PostController {
     }
 
     getPosts() {
-        this.restController.get("http://localhost:3000/articles/?username="+this.username+"&password="+this.password, function (data, status, xhr) {
+        this.restController.get("http://localhost:3000/articles/?username="+this.username+"&password="+this.password+"", function (data, status, xhr) {
             console.log("data", this.password)
             for (var id in data) {
                 var post = data[id]
@@ -160,7 +153,6 @@ class PostController {
     }  
 
     newPost(post) {
-        //api call
 
         this.add_element_to_array(post);
 
@@ -177,8 +169,7 @@ class PostController {
         }
 
 
-
-        this.restController.post("http://localhost:3000/articles/?username="+this.username+"&password="+this.password, data, function () {
+        this.restController.post("http://localhost:3000/articles/?username="+this.username+"&password="+this.password+"", data, function () {
             this.createUIPost(post)
             location.reload(true)
         }.bind(this))
@@ -257,8 +248,7 @@ class PostController {
         modalFeaturedCheck.prop("checked", post.featured)
         modalSubtitle.attr("value", "" + post.subtitle + "")
         modalAuthor.attr("value", "" + post.autore + "")
-        modalCreated_date.val(this.formatDate(post.Created_date))
-        //console.log("date",post.Created_date)
+        modalCreated_date.val(post.Created_date)
         modalTag.attr("value", post.Ttags)
         modalImg.attr("value", "" + post.img_source + "")
 
@@ -268,6 +258,11 @@ class PostController {
     resetModal() {
         this.modalTitle.val("");
         this.modalBody.val("");
+        this.modalSubtitle.val("");
+        this.modalAuthor.val("");
+        this.modalCreated_date.val("");
+        this.modalTag.val("");
+        this.modalImg.val("");
         this.modalPublicCheck.prop("checked", false);
         this.modalFeaturedCheck.prop("checked", false);
     }
@@ -283,7 +278,7 @@ class PostController {
         var postAuthor = postContainer.find(".card-author")
         var postSubtitle = postContainer.find(".subtitle")
         var postDate = postContainer.find(".card-date")
-        var postTag = postContainer.find(".card-tag")
+        var postTTags = postContainer.find(".card-tag")
         var postImg = postContainer.find(".card-img-top")
 
         postHeader.html(post.title)
@@ -292,10 +287,10 @@ class PostController {
         //this.modalFeaturedCheck.prop("checked", post.featured)
         postSubtitle.html(post.subtitle)
         postAuthor.html(post.autore)
-        postDate.val(post.created_date)
+        postDate.html(post.created_date)
         console.log("date",post.Created_date)
-        postTags.html(post.Ttags.toString())    
-        console.log("date",post.Ttags)
+        postTTags.html(post.Ttags.toString())    
+        //console.log("date",post.Ttags)
         postImg.attr("src", "" + post.img_source + "")
     }
 
