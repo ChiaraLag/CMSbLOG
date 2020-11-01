@@ -35,10 +35,8 @@ app.use(function (req, res, next) {
 
 
 var routes = require('./api/routes/blogArticoloRoutes'); //importing route
+
 routes(app); //register the route
-
-
-
 
 app.use(express.static(__dirname + '/public'));
 
@@ -46,8 +44,17 @@ path = require('path')
 
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname = "/index.html"));
+    res.sendFile(path.join(__dirname = "/index.html"))
+    res.sendFile(path.join(__dirname = "/login.html"))
+    res.sendFile(path.join(__dirname = "/articles.html"))
+    res.sendFile(path.join(__dirname = "/article_page.html"))
+    res.sendFile(path.join(__dirname = "/archived_articles.html"))
+    res.sendFile(path.join(__dirname = "/css/style.css"))    
     res.sendFile(path.join(__dirname = "/css/style.css"))
+    res.sendFile(path.join(__dirname = "/img/articoli.png"))
+    res.sendFile(path.join(__dirname = "/img/autori.png"))
+    res.sendFile(path.join(__dirname = "/img/tecnologia.png"))
+    res.sendFile(path.join(__dirname = "/img/white.gif"))
 })
 
 
