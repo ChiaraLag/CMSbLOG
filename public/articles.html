@@ -34,13 +34,18 @@
         </div>
 
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        <button type="button" class="btn btn-primary bg-dark mr-3" data-toggle="modal" data-target="#exampleModal">
             Add Post
         </button>
 
+        <button type="button" class="btn btn-primary bg-dark" id="archivedBtn">
+            Mostra Post Archiviati
+        </button>
     </nav>
 
     <section class="container">
+        
+
         <div class="row" id="postsRow">
             <div class="col-md-4" id="postContainer" style="display : none">
                 <div class="card my-1" id="first-article">
@@ -53,9 +58,10 @@
                         <p class="card-author"></p>
                         <p class="card-date"></p>
                         <p class="card-tag"></p>
-                        <a href="#" class="card-link" id="editPost">modifica</a>
-                        <a href="#" class="card-link" id="deletePost">elimina</a>
-                        <a href="#" class="card-link" id="readPost">vai all'articolo</a>                       
+                        <a href="#" class="card-link" id="editPost">Modifica</a>
+                        <a href="#" class="card-link" id="deletePost">Elimina</a>
+                        <a href="#" class="card-link" id="archivePost">Archivia</a>
+                        <br><a href="#" class="card-link" id="readPost"><strong>Vai all'articolo</strong></a>                       
                     </footer>
             </div>
 

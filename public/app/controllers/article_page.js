@@ -11,10 +11,12 @@ class ArticlePageController {
         this.postTags
         this.username
         this.password
+        this.commentSubcontainer
     }
 
     init() {
         $(document).ready(function () {
+            this.commentSubcontainer = $("#commentSubcontainer")
             this.postHeader = $(".articleTitle")
             this.postSubtitle = $(".articleSubtitle")
             this.postBody = $(".articleBody")
@@ -26,7 +28,7 @@ class ArticlePageController {
             var post = JSON.parse(sessionStorage.getItem('data'));
             this.username = JSON.parse(sessionStorage.getItem('username'));
             this.password = JSON.parse(sessionStorage.getItem('password'));
-            this.getPost(post);
+            this.getPost(post);           
             this.getComments(post);
             //console.log("post", JSON.parse(sessionStorage.getItem('data')))
         }.bind(this))
@@ -34,9 +36,8 @@ class ArticlePageController {
 
     getPost(post) {
         this.restController.getArticle("http://localhost:3000/articles/" + post._id + "?this.username=" + this.username + "&this.password=" + this.password + "", function (data, status, xhr) {
-            post = data
+            post = data         
             this.createUIArticlePage(post)
-
 
         }.bind(this))
     }
@@ -70,29 +71,38 @@ class ArticlePageController {
     }
 
     getComments(post) {
-        this.restController.getCommentsArticle("http://localhost:3000/comments/?this.username=" + this.username + "&this.password=" + this.password + "", function (data, status, xhr) {
+        this.restController.getCommentsArticle("http://localhost:3000/comments?username="+this.username+"&password="+this.password+"", function (data, status, xhr) {
             console.log("data", data)
             for (var id in data) {
                 var comment = data[id]
-                //if(comment.id_articolo===post._id)
-                this.createUIComment(comment)
-
+                if(post._id==comment.id_articolo)
+                    this.createUIComment(comment)
+                
             }
         }.bind(this))
     }
 
     createUIComment(comment) {
 
-        var commentDate = $(".commentDate")
-        var commentName = $(".commentAuthor")
-        var commentBody = $(".commentBody")
-        var commentStatus = $(".commentStatus")
-        var hideCommentBtn = '<a href="#" class="card-link pl-3 pb-1" id="hideComment">mostra/nascondi</a>'
+        var commentSubcontainer = $("#comments").clone()
+        commentSubcontainer.css("display", "block")
+        commentSubcontainer.attr("id", "")
+        commentSubcontainer.addClass("class", "commentSubcontainer")
+
+        var commentDate = commentSubcontainer.find(".commentDate")
+        var commentName = commentSubcontainer.find(".commentAuthor")
+        var commentBody = commentSubcontainer.find(".commentBody")
+        var commentStatus = commentSubcontainer.find(".commentStatus")
+        var commentColumn = commentSubcontainer.find(".column")
+        var hideCommentBtn = '<a href="#" class="card-link pb-1" id="hideComment">nascondi</a>'
+        var showCommentBtn = '<a href="#" class="card-link pb-1" id="showComment">mostra</a>'
 
         commentDate.html(this.formatDate(comment.Created_date))
         commentName.html(comment.autore)
         commentBody.html(comment.body)
-        $(".row").append(hideCommentBtn)
+        commentColumn.append(hideCommentBtn)
+        commentColumn.append(showCommentBtn)
+            
 
         if (comment.public === true) {
             commentStatus.html("Visibile")
@@ -102,21 +112,20 @@ class ArticlePageController {
         }
 
 
-        $("#hideComment").click(function () {
-            console.log("ciao")
-            if (comment.public === false) {
-                comment.public = true
-                console.log("bye")
-            }
-            else {
-                comment.public = false
-                console.log("uni")
-            }
+        commentSubcontainer.find("#hideComment").click(function (e) {
+            e.preventDefault();
+            comment.public = false
+            this.statusComment(comment)
+        }.bind(this))
+
+        commentSubcontainer.find("#showComment").click(function (e) {
+            e.preventDefault();
+            comment.public = true
             this.statusComment(comment)
         }.bind(this))
 
 
-
+        $("#commentContainer").append(commentSubcontainer)
 
 
     };
@@ -127,9 +136,11 @@ class ArticlePageController {
             "public": comment.public
         }
 
-        this.restController.statusComment("http://localhost:3000/comments/" + comment._id + "?this.username=" + this.username + "&this.password=" + this.password + "", data,
+        this.restController.patchComment("http://localhost:3000/comments/"+comment._id+"?username="+this.username+"&password="+this.password, data,
             function () {
-                //location.reload(true)
+                console.log("visibilità",comment.public)
+                console.log("username",this.password)
+                location.reload(true)
             }.bind(this)
         )
 

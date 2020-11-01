@@ -88,7 +88,7 @@ class RestController{
 
     }
 
-    statusComment(url,data,onSuccess,onError){
+    patchComment(url,data,onSuccess,onError){
         $.ajax({
             url: url,
             type: 'PATCH',

@@ -6,6 +6,7 @@ function Post(author, title, subtitle, body, public, featured, created_date, img
     this.public = public
     this.featured = featured
     this.created_date = created_date
-    this.img_source = img_source
+    this.img_source = img_source    
+    this.archived
     this.tag = []
 }

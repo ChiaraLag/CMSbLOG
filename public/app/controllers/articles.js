@@ -12,6 +12,7 @@ class PostController {
         this.modalBody
         this.modalPublicCheck
         this.modalFeaturedCheck
+        this.modalArchivedCheck
         this.modalSubtitle
         this.modalAuthor
         this.modalTag
@@ -30,7 +31,7 @@ class PostController {
         this.article
         this.username
         this.password
-
+        this.archivedPostBtn
     }
 
     init() {
@@ -50,7 +51,8 @@ class PostController {
             this.commentAuthor = $("#commentAuthor")
             this.commentBody = $("#commentBody")
             this.commentDate = $("#commentDate")
-            this.addPostBtn = $("#saveBtn")
+            this.addPostBtn = $("#saveBtn")     
+            this.archivedPostBtn = $("#archivedBtn")
 
             this.username = JSON.parse(sessionStorage.getItem('username'));
             this.password = JSON.parse(sessionStorage.getItem('password'));
@@ -62,6 +64,7 @@ class PostController {
                     this.editedPost.body = this.modalBody.val()
                     this.editedPost.public = this.modalPublicCheck.is(":checked")
                     this.editedPost.featured = this.modalFeaturedCheck.is(":checked")
+                    this.editedPost.archived = this.editedPost.archived
                     this.editedPost.subtitle = this.modalSubtitle.val()
                     this.editedPost.created_date = this.modalCreated_date.val()
                     this.posTags = this.postTag.val()
@@ -90,19 +93,19 @@ class PostController {
                 this.closeModal()
                 this.resetModal()
 
-            }.bind(this))
+            }.bind(this))    
 
             this.getPosts()
 
+           this.archivedPostBtn.click(function () {     
+            window.location.href = 'archived_articles.html'
+           }.bind(this))
 
         }.bind(this))
 
     }
 
     patchPost(post) {
-        //call the rest controller      
-        //console.log("ID post", post._id)
-        
         console.log("content", post)
         this.add_element_to_array(post)
         var data = {
@@ -116,7 +119,6 @@ class PostController {
             "Ttags": post.tag,
             "img_source": post.img_source
         }
-        //console.log("ID post", post._id)
 
         this.restController.patch("http://localhost:3000/articles/"+post._id+"?username="+this.username+"&password="+this.password+"", data,
             function () {
@@ -131,6 +133,20 @@ class PostController {
 
     }
 
+    archivePost(post) {
+        var data = {
+            "archived": post.archived,
+        }
+
+        this.restController.patch("http://localhost:3000/articles/"+post._id+"?username="+this.username+"&password="+this.password+"", data,
+            function () {       
+                location.reload(true)
+
+            }.bind(this)
+        )
+    }
+
+
     deletePost(post) {
 
         this.restController.delete("http://localhost:3000/articles/"+ post._id +"?username="+this.username+"&password="+this.password+"",
@@ -144,10 +160,11 @@ class PostController {
 
     getPosts() {
         this.restController.get("http://localhost:3000/articles/?username="+this.username+"&password="+this.password+"", function (data, status, xhr) {
-            console.log("data", this.password)
+            console.log("data", data.archived)
             for (var id in data) {
                 var post = data[id]
-                this.createUIPost(post)
+                if(post.archived===false)
+                    this.createUIPost(post)
             }
         }.bind(this))
     }  
@@ -163,21 +180,23 @@ class PostController {
             "body": post.body,
             "public": post.public,
             "featured": post.featured,
+            "archived": post.archived,
             "Created_date": post.created_date,
             "Ttags": post.tag,
             "img_source": post.img_source
         }
 
 
-        this.restController.post("http://localhost:3000/articles/?username="+this.username+"&password="+this.password+"", data, function () {
+        this.restController.post("http://localhost:3000/articles/?username="+this.username+"&password="+this.password, data, function () { 
             this.createUIPost(post)
-            location.reload(true)
+            location.reload(true)          
         }.bind(this))
 
     }
 
     createUIPost(post) {
         var postContainer = $("#postContainer").clone()
+        console.log(postContainer)
         postContainer.css("display", "block")
         postContainer.attr("id", "")
         postContainer.addClass("class", "postContainer")
@@ -189,10 +208,6 @@ class PostController {
         var postDate = postContainer.find(".card-date")
         var postTTags = postContainer.find(".card-tag")
         var postImg = postContainer.find(".card-img-top")
-
-        /*if(post.public === false){
-            postAuthor.append("Bozza")
-        }*/
 
         if (post.featured === true) {
             postHeader.css("background-color", "#64b5f6");         
@@ -222,6 +237,12 @@ class PostController {
             e.preventDefault();
             sessionStorage.setItem('data', JSON.stringify(post))
             window.location.href = 'article_page.html'
+        }.bind(this))
+
+        postContainer.find("#archivePost").click(function () {
+            post.archived = true
+            this.archivePost(post)
+            //location.reload(true)
         }.bind(this))
 
         $("#postsRow").append(postContainer)

@@ -5,6 +5,7 @@ body{
 
 footer{
     background-color: #263238;
+    color:#eceff1;
 }
 
 footer p {
@@ -25,4 +26,22 @@ footer p {
     border: 3px solid;
 }
 
+a:link {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  
+  a:visited {
+    color: grey;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    color:dimgray;
+    background-color: transparent;
+    text-decoration: underline;
+  }
+  
 
