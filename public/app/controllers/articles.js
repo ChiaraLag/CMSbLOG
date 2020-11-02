@@ -120,7 +120,7 @@ class PostController {
             "img_source": post.img_source
         }
 
-        this.restController.patch("http://localhost:3000/articles/"+post._id+"?username="+this.username+"&password="+this.password+"", data,
+        this.restController.patch("https://cms-front-end-chiara.herokuapp.com/articles/"+post._id+"?username="+this.username+"&password="+this.password+"", data,
             function () {
                 this.updateUIPost(post)
                 this.editMode = false
@@ -138,7 +138,7 @@ class PostController {
             "archived": post.archived,
         }
 
-        this.restController.patch("http://localhost:3000/articles/"+post._id+"?username="+this.username+"&password="+this.password+"", data,
+        this.restController.patch("https://cms-front-end-chiara.herokuapp.com/articles/"+post._id+"?username="+this.username+"&password="+this.password+"", data,
             function () {       
                 location.reload(true)
 
@@ -149,7 +149,7 @@ class PostController {
 
     deletePost(post) {
 
-        this.restController.delete("http://localhost:3000/articles/"+ post._id +"?username="+this.username+"&password="+this.password+"",
+        this.restController.delete("https://cms-front-end-chiara.herokuapp.com/articles/"+ post._id +"?username="+this.username+"&password="+this.password+"",
             function () {
                 location.reload(true)
             }.bind(this)
@@ -159,7 +159,7 @@ class PostController {
     }
 
     getPosts() {
-        this.restController.get("http://localhost:3000/articles/?username="+this.username+"&password="+this.password+"", function (data, status, xhr) {
+        this.restController.get("https://cms-front-end-chiara.herokuapp.com/articles/?username="+this.username+"&password="+this.password+"", function (data, status, xhr) {
             console.log("data", data.archived)
             for (var id in data) {
                 var post = data[id]
@@ -187,7 +187,7 @@ class PostController {
         }
 
 
-        this.restController.post("http://localhost:3000/articles/?username="+this.username+"&password="+this.password, data, function () { 
+        this.restController.post("https://cms-front-end-chiara.herokuapp.com/articles/?username="+this.username+"&password="+this.password, data, function () { 
             this.createUIPost(post)
             location.reload(true)          
         }.bind(this))

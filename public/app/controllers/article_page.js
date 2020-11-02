@@ -35,7 +35,7 @@ class ArticlePageController {
     }
 
     getPost(post) {
-        this.restController.getArticle("http://localhost:3000/articles/" + post._id + "?this.username=" + this.username + "&this.password=" + this.password + "", function (data, status, xhr) {
+        this.restController.getArticle("https://cms-front-end-chiara.herokuapp.com/articles/" + post._id + "?this.username=" + this.username + "&this.password=" + this.password + "", function (data, status, xhr) {
             post = data         
             this.createUIArticlePage(post)
 
@@ -71,7 +71,7 @@ class ArticlePageController {
     }
 
     getComments(post) {
-        this.restController.getCommentsArticle("http://localhost:3000/comments?username="+this.username+"&password="+this.password+"", function (data, status, xhr) {
+        this.restController.getCommentsArticle("https://cms-front-end-chiara.herokuapp.com/comments?username="+this.username+"&password="+this.password+"", function (data, status, xhr) {
             console.log("data", data)
             for (var id in data) {
                 var comment = data[id]
@@ -136,7 +136,7 @@ class ArticlePageController {
             "public": comment.public
         }
 
-        this.restController.patchComment("http://localhost:3000/comments/"+comment._id+"?username="+this.username+"&password="+this.password, data,
+        this.restController.patchComment("https://cms-front-end-chiara.herokuapp.com/comments/"+comment._id+"?username="+this.username+"&password="+this.password, data,
             function () {
                 console.log("visibilità",comment.public)
                 console.log("username",this.password)

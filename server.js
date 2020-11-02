@@ -13,7 +13,9 @@ mongoose.connect(urlString);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
 app.use(function (req, res, next) {
+  
   res.setHeader('Access-Control-Allow-Origin', '*');
 
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
@@ -24,15 +26,6 @@ app.use(function (req, res, next) {
   }
   next();
  })
-
- /*
- app.use(session({
-  secret: 'work hard',
-  resave: true,
-  saveUninitialized: false
-})); 
-*/
-
 
 var routes = require('./api/routes/blogArticoloRoutes'); //importing route
 

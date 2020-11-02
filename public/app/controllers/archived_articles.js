@@ -38,7 +38,7 @@ class ArchivedArticlesController {
     }
 
     getPosts() {
-        this.restController.get("http://localhost:3000/articles/?username="+this.username+"&password="+this.password+"", function (data, status, xhr) {
+        this.restController.get("https://cms-front-end-chiara.herokuapp.com/articles/?username="+this.username+"&password="+this.password+"", function (data, status, xhr) {
             console.log("data", data.archived)
             for (var id in data) {
                 var post = data[id]
