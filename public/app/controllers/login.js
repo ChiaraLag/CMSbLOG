@@ -32,7 +32,7 @@ class LoginController {
     }      
     
     getUtente(username, password) {
-        this.restController.getUser("https://cms-front-end-chiara.herokuapp.com/users/?username="+username+"&password="+password,
+        this.restController.getUser("http://localhost:3000/users?username="+username+"&password="+password,
             function () {
                 console.log("Loggato")
                 sessionStorage.setItem('username', JSON.stringify(username))             
