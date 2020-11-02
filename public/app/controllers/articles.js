@@ -32,6 +32,7 @@ class PostController {
         this.username
         this.password
         this.archivedPostBtn
+        this.cancelBtn
     }
 
     init() {
@@ -53,6 +54,7 @@ class PostController {
             this.commentDate = $("#commentDate")
             this.addPostBtn = $("#saveBtn")     
             this.archivedPostBtn = $("#archivedBtn")
+            this.cancelBtn = $("cancelBtn")
 
             this.username = JSON.parse(sessionStorage.getItem('username'));
             this.password = JSON.parse(sessionStorage.getItem('password'));
@@ -99,6 +101,10 @@ class PostController {
 
            this.archivedPostBtn.click(function () {     
             window.location.href = 'archived_articles.html'
+           }.bind(this))
+
+           this.cancelBtn.click(function () {     
+             this.resetModal()
            }.bind(this))
 
         }.bind(this))
@@ -188,8 +194,8 @@ class PostController {
 
 
         this.restController.post("https://cms-front-end-chiara.herokuapp.com/articles/?username="+this.username+"&password="+this.password, data, function () { 
-            this.createUIPost(post)
-            location.reload(true)          
+            location.reload(true) 
+            this.createUIPost(post)         
         }.bind(this))
 
     }
@@ -270,6 +276,7 @@ class PostController {
         modalSubtitle.attr("value", "" + post.subtitle + "")
         modalAuthor.attr("value", "" + post.autore + "")
         modalCreated_date.val(post.Created_date)
+        //console.log("date",post.Created_date)
         modalTag.attr("value", post.Ttags)
         modalImg.attr("value", "" + post.img_source + "")
 
